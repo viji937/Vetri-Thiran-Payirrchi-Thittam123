@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitBuddy | Your Plan</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='css/styles.css') }}">
+</head>
+<body>
+<main class="shell">
+  <header class="topbar">
+    <a class="brand" href="/">FitBuddy</a>
+    <a class="text-link" href="/">Create another plan</a>
+  </header>
+
+  {% if message %}<div class="alert success">{{ message }}</div>{% endif %}
+  {% if error %}<div class="alert error">{{ error }}</div>{% endif %}
+
+  {% if user %}
+  <section class="profile card">
+    <div>
+      <span class="eyebrow">PERSONALIZED PLAN</span>
+      <h1>{{ user.username }}</h1>
+      <p>User ID: <strong>{{ user.user_id }}</strong></p>
+    </div>
+    <div class="stats">
+      <span><b>{{ user.age }}</b> age</span>
+      <span><b>{{ user.weight }}</b> kg</span>
+      <span><b>{{ user.goal }}</b> goal</span>
+      <span><b>{{ user.intensity }}</b> intensity</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-heading">
+      <h2>Original 7-Day Workout Plan</h2>
+      <span class="pill">Gemini</span>
+    </div>
+    <pre class="plan">{{ workout_plan }}</pre>
+  </section>
+
+  {% if updated_plan %}
+  <section class="card highlight">
+    <div class="section-heading">
+      <h2>Updated Plan</h2>
+      <span class="pill">Feedback applied</span>
+    </div>
+    <pre class="plan">{{ updated_plan }}</pre>
+  </section>
+  {% endif %}
+
+  <section class="card">
+    <div class="section-heading">
+      <h2>Nutrition / Recovery Tip</h2>
+      <span class="pill">Quick tip</span>
+    </div>
+    <p class="tip">{{ nutrition_tip }}</p>
+  </section>
+
+  <section class="card">
+    <h2>Refine your plan</h2>
+    <p class="muted">Example: “add more mobility” or “make the sessions easier.”</p>
+    <form action="/submit-feedback" method="post">
+      <input type="hidden" name="user_id" value="{{ user.user_id }}">
+      <textarea name="feedback" rows="5" maxlength="2000" required placeholder="Tell FitBuddy what you want changed..."></textarea>
+      <button type="submit">Update Plan →</button>
+    </form>
+  </section>
+  {% endif %}
+</main>
+</body>
+</html>

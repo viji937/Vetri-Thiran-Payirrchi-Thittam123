@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitBuddy | AI Fitness Planner</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='css/styles.css') }}">
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div>
+        <span class="eyebrow">FITBUDDY · AI FITNESS PLANNER</span>
+        <h1>Build a routine that fits your life.</h1>
+        <p>Generate a structured 7-day wellness plan, get a recovery tip, and refine the plan with feedback.</p>
+      </div>
+      <div class="hero-badge">Gemini + FastAPI</div>
+    </section>
+
+    {% if error %}
+      <div class="alert error"><strong>{{ error }}</strong>{% if details %}<br>{{ details }}{% endif %}</div>
+    {% endif %}
+
+    {% if demo_mode %}
+      <div class="alert info">Demo mode is ON. The app works without a Gemini API key and uses safe sample responses.</div>
+    {% endif %}
+
+    <section class="card">
+      <h2>Your details</h2>
+      <form action="/generate-workout" method="post" class="form-grid">
+        <label>Name
+          <input name="username" required minlength="2" maxlength="120" placeholder="Your name">
+        </label>
+
+        <label>User ID
+          <input name="user_id" required minlength="2" maxlength="80" placeholder="e.g. FB001">
+        </label>
+
+        <label>Age
+          <input name="age" type="number" min="13" max="100" required placeholder="Age">
+        </label>
+
+        <label>Weight (kg)
+          <input name="weight" type="number" min="1" max="500" step="0.1" required placeholder="Weight">
+        </label>
+
+        <label>Fitness goal
+          <select name="goal" required>
+            <option value="general wellness">General wellness</option>
+            <option value="muscle gain">Muscle gain</option>
+            <option value="weight loss">Weight loss</option>
+            <option value="flexibility">Flexibility</option>
+          </select>
+        </label>
+
+        <label>Workout intensity
+          <select name="intensity" required>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </label>
+
+        <div class="form-actions">
+          <button type="submit">Generate 7-Day Plan →</button>
+        </div>
+      </form>
+
+      <p class="fine-print">
+        FitBuddy provides general wellness information, not medical diagnosis or treatment.
+        Stop if you experience pain, dizziness, fainting, or unusual symptoms and seek appropriate help.
+      </p>
+    </section>
+
+    <footer>
+      <a href="/docs">API Docs</a>
+      <span>•</span>
+      <a href="/health">Health Check</a>
+    </footer>
+  </main>
+</body>
+</html>

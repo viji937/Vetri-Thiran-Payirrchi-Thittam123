@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitBuddy | Admin</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='css/styles.css') }}">
+</head>
+<body>
+<main class="shell wide">
+  <header class="topbar">
+    <div>
+      <span class="eyebrow">ADMIN DASHBOARD</span>
+      <h1>All Users & Plans</h1>
+    </div>
+    <a class="text-link" href="/">Home</a>
+  </header>
+
+  {% if not users %}
+    <section class="card"><p>No users have been registered yet.</p></section>
+  {% endif %}
+
+  {% for user in users %}
+  {% set plan = plans.get(user.user_id) %}
+  <section class="card admin-card">
+    <div class="admin-header">
+      <div>
+        <h2>{{ user.username }}</h2>
+        <p>{{ user.user_id }} · {{ user.age }} years · {{ user.weight }} kg · {{ user.goal }} · {{ user.intensity }}</p>
+      </div>
+      <form action="/admin/delete-user" method="post" onsubmit="return confirm('Delete this user and their saved plans?');">
+        <input type="hidden" name="user_id" value="{{ user.user_id }}">
+        <input type="hidden" name="key" value="{{ admin_key }}">
+        <button class="danger" type="submit">Delete</button>
+      </form>
+    </div>
+
+    {% if plan %}
+      <h3>Original Plan</h3>
+      <pre class="plan compact">{{ plan.original_plan }}</pre>
+
+      {% if plan.updated_plan %}
+        <h3>Updated Plan</h3>
+        <pre class="plan compact">{{ plan.updated_plan }}</pre>
+        <p><strong>Feedback:</strong> {{ plan.feedback }}</p>
+      {% endif %}
+    {% else %}
+      <p>No plan saved.</p>
+    {% endif %}
+  </section>
+  {% endfor %}
+</main>
+</body>
+</html>
